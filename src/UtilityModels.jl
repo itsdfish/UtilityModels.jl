@@ -1,5 +1,8 @@
 module UtilityModels
+    using Parameters
+    export ProspectTheory, expected_utility, Gamble
 
-# Write your package code here.
-
+    abstract type UtilityModel end
+    include("ProspectTheory.jl")
+    include("Gamble.jl")
 end
