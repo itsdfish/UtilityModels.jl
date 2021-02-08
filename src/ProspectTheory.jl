@@ -47,7 +47,6 @@ Function Signature
 expected_utility(model::ProspectTheory, gamble)
 ````
 """
-
 function expected_utility(model::ProspectTheory, gamble)
     @unpack α,β,γg,γl,λ = model
     @unpack vg,pg,vl,pl = gamble
@@ -58,10 +57,23 @@ function expected_utility(model::ProspectTheory, gamble)
     return sum(λ*ωl.*utill) + sum(ωg.*utilg)
 end
 
+"""
+*compute_weights*
+
+`compute_weights` computes decision weights based on cummulative outcomes
+
+- `p`: a probability vector
+- `γ`: parameter that controls weighting of low and high probabilities
+
+Function Signature
+````julia
+compute_weights(p, γ)
+````
+"""
 function compute_weights(p, γ)
     n = length(p)
     f(i) = weight(sum(p[i:n]), γ) - weight(sum(p[(i+1):n]), γ)
     ω = [f(i) for i in 1:n-1]
-    push!(ω, weight(p[n], γ))
+    isempty(p) ? nothing : push!(ω, weight(p[n], γ))
     return ω
 end
