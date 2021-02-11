@@ -76,6 +76,20 @@ compute_weights(model::UtilityModel, gamble::Gamble)
 """
 compute_weights(model::UtilityModel, gamble::Gamble) = gamble.p
 
+"""
+*sort!*
+
+`sort!` a generic method for sorting gamble probabilities and values. The generic method
+does not sort the gambles
+
+- `model`: a model M <: UtilityModel
+- `gamble`: a gamble object
+
+Function Signature
+````julia
+sort!(model::UtilityModel, gamble)
+````
+"""
 function sort!(model::UtilityModel, gamble)
     return nothing
 end
