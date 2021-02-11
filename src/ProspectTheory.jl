@@ -32,89 +32,6 @@ function ProspectTheory(;α=.80, β=α, γg=.70, γl=γg, λ=2.25)
     return ProspectTheory(α, β, γg, γl, λ)
 end
 
-weight(p, γ) = (p^γ)/(p^γ + (1-p)^γ)^(1/γ)
-
-"""
-*mean*
-
-`mean` computes the expected utility according to prospect theory
-
-- `model`: a model object for prospect theory
-- `gamble`: a gamble object
-
-Function Signature
-````julia
-mean(model::ProspectTheory, gamble::Gamble)
-````
-"""
-function mean(model::ProspectTheory, gamble::Gamble)
-    @unpack γg,γl,λ = model
-    @unpack pg,pl = gamble
-    ωg = compute_weights(pg, γg)
-    ωl = compute_weights(pl, γl)
-    utill, utilg = compute_utility(model, gamble)
-    return sum(λ*ωl.*utill) + sum(ωg.*utilg)
-end
-
-"""
-*var*
-
-`var` computes the variance of gamble according to prospect theory
-
-- `model`: a model object for prospect theory
-- `gamble`: a gamble object
-
-Function Signature
-````julia
-var(model::ProspectTheory, gamble::Gamble)
-````
-"""
-function var(model::ProspectTheory, gamble::Gamble)
-    @unpack γg,γl,λ = model
-    @unpack pg,pl = gamble
-    eu = mean(model, gamble)
-    ωg = compute_weights(pg, γg)
-    ωl = compute_weights(pl, γl)
-    utill, utilg = compute_utility(model, gamble)
-    return sum(ωl .* (utill .- eu).^2) + sum(ωg .* (utilg .- eu).^2)
-end
-
-"""
-*std*
-
-`std` computes the standard deviation of gamble according to prospect theory
-
-- `model`: a model object for prospect theory
-- `gamble`: a gamble object
-
-Function Signature
-````julia
-std(model::ProspectTheory, gamble::Gamble)
-````
-"""
-std(model::ProspectTheory, gamble::Gamble) = sqrt(var(model, gamble))
-
-"""
-*compute_weights*
-
-`compute_weights` computes decision weights based on cummulative outcomes
-
-- `p`: a probability vector
-- `γ`: parameter that controls weighting of low and high probabilities
-
-Function Signature
-````julia
-compute_weights(p, γ)
-````
-"""
-function compute_weights(p, γ)
-    n = length(p)
-    f(i) = weight(sum(p[i:n]), γ) - weight(sum(p[(i+1):n]), γ)
-    ω = [f(i) for i in 1:n-1]
-    isempty(p) ? nothing : push!(ω, weight(p[n], γ))
-    return ω
-end
-
 """
 *compute_utility*
 
@@ -129,9 +46,52 @@ compute_utility(model::ProspectTheory, gamble::Gamble)
 ````
 """
 function compute_utility(model::ProspectTheory, gamble)
-    @unpack α,β = model
+    @unpack α,β,λ = model
     @unpack vg,vl = gamble
     utilg = vg.^α
-    utill = @. -abs(vl)^β 
-    return utill, utilg
+    utill = @. -λ*abs(vl)^β 
+    return [utill; utilg]
 end
+
+"""
+*compute_weights*
+
+`compute_weights` computes decision weights based on cummulative outcomes
+
+- `model`: a model object for prospect theory
+- `gamble`: a gamble object
+
+Function Signature
+````julia
+compute_weights(model::ProspectTheory, gamble::Gamble)
+````
+"""
+function compute_weights(model::ProspectTheory, gamble::Gamble)
+    @unpack pg,pl = gamble
+    @unpack γg,γl = model
+    ω = [_compute_weights(pl, γl); _compute_weights(pg, γg)]
+    return ω
+end
+
+"""
+*_compute_weights*
+
+`_compute_weights` computes decision weights based on cummulative outcomes
+
+- `p`: a probability vector
+- `γ`: parameter that controls weighting of low and high probabilities
+
+Function Signature
+````julia
+_compute_weights(p, γ)
+````
+"""
+function _compute_weights(p, γ)
+    n = length(p)
+    f(i) = weight(sum(p[i:n]), γ) - weight(sum(p[(i+1):n]), γ)
+    ω = [f(i) for i in 1:n-1]
+    isempty(p) ? nothing : push!(ω, weight(p[n], γ))
+    return ω
+end
+
+weight(p, γ) = (p^γ)/(p^γ + (1-p)^γ)^(1/γ)

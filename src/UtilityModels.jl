@@ -4,8 +4,9 @@ module UtilityModels
     export ProspectTheory, ExpectedUtility, Gamble
     export mean, var , std
     abstract type UtilityModel end
-
+    
     include("Gamble.jl")
+    include("UtilityModel.jl")
     include("ProspectTheory.jl")
     include("ExpectedUtility.jl")
 end

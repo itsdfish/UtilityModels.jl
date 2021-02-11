@@ -11,10 +11,8 @@ using SafeTestsets
     gamble = Gamble(;p, v)
     eu = mean(model, gamble)
     @test eu ≈ .5672 atol = 1e-4
-    ωg = compute_weights(gamble.pg, γg)
-    @test ωg ≈ [0.0992,0.3165] atol = 1e-4
-    ωl = compute_weights(gamble.pl, γl)
-    @test ωl ≈ [0.1293,0.3281] atol = 1e-4
+    ω = compute_weights(model, gamble)
+    @test ω ≈ [0.1293,0.3281,0.0992,0.3165] atol = 1e-4
 
     α = 1.2; β = 1.5; γg = .8; γl = .9; λ = 1.5
     model = ProspectTheory(;α, β, γg, γl, λ)
@@ -23,10 +21,8 @@ using SafeTestsets
     gamble = Gamble(;p, v)
     eu = mean(model, gamble)
     @test eu ≈ -8.1017 atol = 1e-4
-    ωg = compute_weights(gamble.pg, γg)
-    @test ωg ≈ [0.0848,0.2415] atol = 1e-4
-    ωl = compute_weights(gamble.pl, γl)
-    @test ωl ≈ [0.1811,0.4962] atol = 1e-4
+    ω = compute_weights(model, gamble)
+    @test ω ≈ [0.1811,0.4962,0.0848,0.2415] atol = 1e-4
 end
 
 @safetestset "ExpectedUtility" begin
