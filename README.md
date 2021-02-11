@@ -1,6 +1,6 @@
 # UtilityModels
 
-UtilityModels.jl is a collection of utility based decision models. Currently, prospect theory is the only model in the collection, but more will be added in the future. 
+UtilityModels.jl is a collection of utility based decision models. Currently, expected utlity theory and prospect theory are the only models in the collection, but more will be added in the future. 
 
 # Examples
 
