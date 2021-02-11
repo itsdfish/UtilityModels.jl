@@ -35,27 +35,64 @@ end
 weight(p, γ) = (p^γ)/(p^γ + (1-p)^γ)^(1/γ)
 
 """
-*expected_utility*
+*mean*
 
-`expected_utility` computes the expected utility given a model and a gamble
+`mean` computes the expected utility given a model and a gamble
 
 - `model`: a model object for prospect theory
 - `gamble`: a gamble object
 
 Function Signature
 ````julia
-expected_utility(model::ProspectTheory, gamble)
+mean(model::ProspectTheory, gamble::Gamble)
 ````
 """
-function expected_utility(model::ProspectTheory, gamble)
-    @unpack α,β,γg,γl,λ = model
-    @unpack vg,pg,vl,pl = gamble
-    utilg = vg.^α
-    utill = @. -abs(vl)^β 
+function mean(model::ProspectTheory, gamble::Gamble)
+    @unpack γg,γl,λ = model
+    @unpack pg,pl = gamble
     ωg = compute_weights(pg, γg)
     ωl = compute_weights(pl, γl)
+    utill, utilg = compute_utility(model, gamble)
     return sum(λ*ωl.*utill) + sum(ωg.*utilg)
 end
+
+"""
+*var*
+
+`var` computes the expected utility given a model and a gamble
+
+- `model`: a model object for prospect theory
+- `gamble`: a gamble object
+
+Function Signature
+````julia
+var(model::ProspectTheory, gamble::Gamble)
+````
+"""
+function var(model::ProspectTheory, gamble::Gamble)
+    @unpack γg,γl,λ = model
+    @unpack pg,pl = gamble
+    eu = mean(model, gamble)
+    ωg = compute_weights(pg, γg)
+    ωl = compute_weights(pl, γl)
+    utill, utilg = compute_utility(model, gamble)
+    return sum(ωl .* (utill .- eu).^2) + sum(ωg .* (utilg .- eu).^2)
+end
+
+"""
+*std*
+
+`std` computes the expected utility given a model and a gamble
+
+- `model`: a model object for prospect theory
+- `gamble`: a gamble object
+
+Function Signature
+````julia
+std(model::ProspectTheory, gamble::Gamble)
+````
+"""
+std(model::ProspectTheory, gamble::Gamble) = sqrt(var(model, gamble))
 
 """
 *compute_weights*
@@ -76,4 +113,12 @@ function compute_weights(p, γ)
     ω = [f(i) for i in 1:n-1]
     isempty(p) ? nothing : push!(ω, weight(p[n], γ))
     return ω
+end
+
+function compute_utility(model::ProspectTheory, gamble)
+    @unpack α,β = model
+    @unpack vg,vl = gamble
+    utilg = vg.^α
+    utill = @. -abs(vl)^β 
+    return utill, utilg
 end

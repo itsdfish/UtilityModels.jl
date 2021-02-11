@@ -9,7 +9,7 @@ using SafeTestsets
     p = [.3,.2,.3,.2]
     v = [10.0,3.0,-2.0,-1.0]
     gamble = Gamble(;p, v)
-    eu = expected_utility(model, gamble)
+    eu = mean(model, gamble)
     @test eu ≈ .5672 atol = 1e-4
     ωg = compute_weights(gamble.pg, γg)
     @test ωg ≈ [0.0992,0.3165] atol = 1e-4
@@ -21,7 +21,7 @@ using SafeTestsets
     p = [.1,.2,.5,.2]
     v = [1.0,3.0,-5.0,-2.0]
     gamble = Gamble(;p, v)
-    eu = expected_utility(model, gamble)
+    eu = mean(model, gamble)
     @test eu ≈ -8.1017 atol = 1e-4
     ωg = compute_weights(gamble.pg, γg)
     @test ωg ≈ [0.0848,0.2415] atol = 1e-4

@@ -12,12 +12,12 @@ model = ProspectTheory(;α, γg, λ)
 p = [.3,.2,.3,.2]
 v = [10.0,3.0,-2.0,-1.0]
 gamble = Gamble(;p, v)
-eu = expected_utility(model, gamble)
+eu = mean(model, gamble)
 ````
 
 Result:
 
 ````julia
-julia> eu = expected_utility(model, gamble)
+julia> eu = mean(model, gamble)
 0.7726777993737757
 ````

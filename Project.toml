@@ -1,13 +1,15 @@
 name = "UtilityModels"
 uuid = "bddc258c-9485-48da-848b-3e4c1ee8966c"
 authors = ["itsdfish <itsdfish@gmail.com> and contributors"]
-version = "0.1.1"
+version = "0.2.0"
 
 [deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 
 [compat]
+Distributions = "v0.24.0"
 Parameters = "v0.12.2"
 SafeTestsets = "v0.0.1"
 julia = "1"
