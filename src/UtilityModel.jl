@@ -20,6 +20,7 @@ mean(model::UtilityModel, gamble::Gamble)
 ````
 """
 function mean(model::UtilityModel, gamble::Gamble)
+    sort!(model, gamble)
     weights = compute_weights(model, gamble)
     utility = compute_utility(model, gamble)
     return weights'*utility
@@ -74,3 +75,7 @@ compute_weights(model::UtilityModel, gamble::Gamble)
 ````
 """
 compute_weights(model::UtilityModel, gamble::Gamble) = gamble.p
+
+function sort!(model::UtilityModel, gamble)
+    return nothing
+end

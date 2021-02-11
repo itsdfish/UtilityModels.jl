@@ -47,11 +47,41 @@ compute_utility(model::ProspectTheory, gamble::Gamble)
 """
 function compute_utility(model::ProspectTheory, gamble)
     @unpack α,β,λ = model
-    @unpack vg,vl = gamble
+    vl,vg = split_values(gamble)
     utilg = vg.^α
     utill = @. -λ*abs(vl)^β 
     return [utill; utilg]
 end
+
+function sort!(model::ProspectTheory, gamble)
+    @unpack p,v = gamble
+    i = sortperm(v)
+    p .= p[i]; v .= v[i]
+    gains = v .>= 0
+    pg = @view p[gains]
+    pl = @view p[.!gains]
+    vg = @view v[gains] 
+    vl = @view v[.!gains]
+    reverse!(vl); reverse!(pl)
+    return nothing
+end
+
+function split_values(gamble)
+    @unpack v = gamble
+    gains = v .>= 0
+    vg = @view v[gains] 
+    vl = @view v[.!gains]
+    return vl,vg
+end
+
+function split_probs(gamble)
+    @unpack v,p = gamble
+    gains = v .>= 0
+    pg = @view p[gains] 
+    pl = @view p[.!gains]
+    return pl,pg
+end
+
 
 """
 *compute_weights*
@@ -67,7 +97,7 @@ compute_weights(model::ProspectTheory, gamble::Gamble)
 ````
 """
 function compute_weights(model::ProspectTheory, gamble::Gamble)
-    @unpack pg,pl = gamble
+    pl,pg = split_probs(gamble)
     @unpack γg,γl = model
     ω = [_compute_weights(pl, γl); _compute_weights(pg, γg)]
     return ω
