@@ -28,3 +28,9 @@ using SafeTestsets
     ωl = compute_weights(gamble.pl, γl)
     @test ωl ≈ [0.1811,0.4962] atol = 1e-4
 end
+
+@safetestset "ExpectedUtility" begin
+    using Test, UtilityModels
+    import UtilityModels: compute_weights
+    α = .8; 
+end

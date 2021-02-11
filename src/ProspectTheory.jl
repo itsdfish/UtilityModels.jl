@@ -37,7 +37,7 @@ weight(p, γ) = (p^γ)/(p^γ + (1-p)^γ)^(1/γ)
 """
 *mean*
 
-`mean` computes the expected utility given a model and a gamble
+`mean` computes the expected utility according to prospect theory
 
 - `model`: a model object for prospect theory
 - `gamble`: a gamble object
@@ -59,7 +59,7 @@ end
 """
 *var*
 
-`var` computes the expected utility given a model and a gamble
+`var` computes the variance of gamble according to prospect theory
 
 - `model`: a model object for prospect theory
 - `gamble`: a gamble object
@@ -82,7 +82,7 @@ end
 """
 *std*
 
-`std` computes the expected utility given a model and a gamble
+`std` computes the standard deviation of gamble according to prospect theory
 
 - `model`: a model object for prospect theory
 - `gamble`: a gamble object
@@ -115,6 +115,19 @@ function compute_weights(p, γ)
     return ω
 end
 
+"""
+*compute_utility*
+
+`compute_utility` computes utility of gamble outcomes according to prospect theory
+
+- `model`: a model object for prospect theory
+- `gamble`: a gamble object
+
+Function Signature
+````julia
+compute_utility(model::ProspectTheory, gamble::Gamble)
+````
+"""
 function compute_utility(model::ProspectTheory, gamble)
     @unpack α,β = model
     @unpack vg,vl = gamble
