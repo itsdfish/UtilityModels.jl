@@ -56,7 +56,8 @@ gamble = Gamble(;p, v)
 ### Expected Utility
 
 ````julia
-eu = mean(model, gamble)
+mean(model, gamble)
+-15.51253
 ````
 
 *References*
