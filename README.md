@@ -15,7 +15,7 @@ In the REPL, enter `?` to activate help mode, then type the name of the function
 
 ````julia
 TAX
-```
+````
 
 # Examples
 
