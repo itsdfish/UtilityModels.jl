@@ -1,7 +1,7 @@
 module UtilityModels
     using Parameters, Distributions
     import Distributions: mean, var, std
-    export ProspectTheory, ExpectedUtility, Gamble
+    export UtilityModel, TAX, ProspectTheory, ExpectedUtility, Gamble
     export mean, var , std
     abstract type UtilityModel end
     
@@ -9,4 +9,5 @@ module UtilityModels
     include("UtilityModel.jl")
     include("ProspectTheory.jl")
     include("ExpectedUtility.jl")
+    include("TAX.jl")
 end
