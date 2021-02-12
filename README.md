@@ -1,6 +1,6 @@
 # UtilityModels
 
-UtilityModels.jl is a collection of utility based decision models. Currently, expected utlity theory transfer of attention exchange, and prospect theory are implemented. More models soon to follow. 
+UtilityModels.jl is a collection of utility based decision models. Currently, expected utlity theory, transfer of attention exchange, and prospect theory are implemented. More models soon to follow. 
 
 # Installation
 
