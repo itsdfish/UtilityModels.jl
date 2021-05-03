@@ -9,7 +9,7 @@ Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 
 [compat]
-Distributions = "v0.24.0"
+Distributions = "v0.24.0, 0.25"
 Parameters = "v0.12.2"
 SafeTestsets = "v0.0.1"
 julia = "1"
