@@ -1,26 +1,23 @@
 """
-*TAX*
+    TAX(;δ=.80, β=.3, γ=.70)
 
-`TAX` constructs a model object for transfer of attention exchange.
+Constructs a model object for transfer of attention exchange.
 
-- `δ`: transfer of attention parameter
-- `γ`: probability weighting parameter
-- `β`: utility curvature
+# Fields
 
-Constructor
-````julia
-TAX(;δ=.80, β=.3, γ=.70)
-````
+- `δ=1.0`: transfer of attention parameter
+- `γ=1.0`: probability weighting parameter
+- `β=.70`: utility curvature
+
 *References*
 
-Birnbaum, M. H., & Chavez, A. (1997). Tests of theories of decision making: Violations of branch independence and distribution independence. Organizational Behavior and human decision Processes, 71(2), 161-194.
-Birnbaum, M. H. (2008). New paradoxes of risky decision making. Psychological review, 115(2), 463.
-
+Birnbaum, M. H., & Chavez, A. (1997). Tests of theories of decision making: Violations of branch independence and distribution independence. Organizational Behavior and Human Decision Processes, 71(2), 161-194.
+Birnbaum, M. H. (2008). New paradoxes of risky decision making. Psychological Review, 115(2), 463.
 """
-mutable struct TAX{T1,T2,T3} <:UtilityModel
-    δ::T1
-    γ::T2
-    β::T3
+@concrete mutable struct TAX <:UtilityModel
+    δ
+    γ
+    β
 end
 
 function TAX(;δ=-1.0, β=1.0, γ=.70)
@@ -28,17 +25,14 @@ function TAX(;δ=-1.0, β=1.0, γ=.70)
 end
 
 """
-*compute_utility*
+    compute_utility(model::TAX, gamble)
 
-`compute_utility` computes utility of gamble outcomes according to TAX
+Computes utility of gamble outcomes according to TAX
+
+# Arguments
 
 - `model`: a model object for TAX
 - `gamble`: a gamble object
-
-Function Signature
-````julia
-compute_utility(model::TAX, gamble::Gamble)
-````
 """
 function compute_utility(model::TAX, gamble)
     @unpack β = model
@@ -64,17 +58,14 @@ function sort!(model::TAX, gamble)
 end
 
 """
-*mean*
+    mean(model::TAX, gamble::Gamble)
 
-`mean` a method for computing the mean for the TAX model
+Computes mean utility for the TAX model
+
+# Arguments
 
 - `model`: a model M <: UtilityModel
 - `gamble`: a gamble object
-
-Function Signature
-````julia
-mean(model::TAX, gamble::Gamble)
-````
 """
 function mean(model::TAX, gamble::Gamble)
     @unpack p,v = gamble

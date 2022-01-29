@@ -1,16 +1,12 @@
 """
-*Gamble*
+    Gamble(;p=[.5,.5], v=[10.0,0.0])
 
-`Gamble` constructs a gamble object with probability vector `p` and outcome vector `v`. 
+Constructs a gamble object with probability vector `p` and outcome vector `v`. 
+
+# Fields 
 
 - `p`: probability vector
 - `v`: outcome vector
-
-
-Constructor
-````julia
-Gamble(;p=[.5,.5], v=[10.0,0.0])
-````
 """
 mutable struct Gamble{T1,T2}
     p::T1

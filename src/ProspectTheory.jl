@@ -1,31 +1,29 @@
 """
-*ProspectTheory*
+    ProspectTheory(;α=.80, β=α, γg=.70, γl=γg, λ=2.25)
 
-`ProspectTheory` constructs a model object for cummulative prospect theory. 
+Constructs a model object for cummulative prospect theory. 
 By default, parameters for utility curvature and probability weigting are equal gains and losses.
 
-- `α`: utility curvature for gains
-- `β`: utility curvature for losses
-- `γg`: probability weighting parameter for gains 
-- `γl`: probability weighting parameter for losses
-- `λ`: loss aversion parameter
+# Fields 
 
-Constructor
-````julia
-ProspectTheory(;α=.80, β=α, γg=.70, γl=γg, λ=2.25)
-````
+- `α=.80`: utility curvature for gains
+- `β=α`: utility curvature for losses
+- `γg=.70`: probability weighting parameter for gains 
+- `γl=γg`: probability weighting parameter for losses
+- `λ=2.25`: loss aversion parameter
+
 *References*
 
 Fennema, H., & Wakker, P. (1997). Original and cumulative prospect theory: A discussion of empirical differences. Journal of Behavioral Decision Making, 10(1), 53-64.
 
 Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and uncertainty, 5(4), 297-323.
 """
-mutable struct ProspectTheory{T1,T2,T3,T4,T5} <:UtilityModel
-    α::T1
-    β::T2
-    γg::T3
-    γl::T4
-    λ::T5
+@concrete mutable struct ProspectTheory <:UtilityModel
+    α
+    β
+    γg
+    γl
+    λ
 end
 
 function ProspectTheory(;α=.80, β=α, γg=.70, γl=γg, λ=2.25)
@@ -33,17 +31,14 @@ function ProspectTheory(;α=.80, β=α, γg=.70, γl=γg, λ=2.25)
 end
 
 """
-*compute_utility*
+    compute_utility(model::ProspectTheory, gamble)
 
-`compute_utility` computes utility of gamble outcomes according to prospect theory
+Computes utility of gamble outcomes according to prospect theory
+
+# Arguments 
 
 - `model`: a model object for prospect theory
 - `gamble`: a gamble object
-
-Function Signature
-````julia
-compute_utility(model::ProspectTheory, gamble::Gamble)
-````
 """
 function compute_utility(model::ProspectTheory, gamble)
     @unpack α,β,λ = model
@@ -54,17 +49,14 @@ function compute_utility(model::ProspectTheory, gamble)
 end
 
 """
-*compute_weights*
+    compute_weights(model::ProspectTheory, gamble::Gamble)
 
-`compute_weights` computes decision weights based on cummulative outcomes
+Computes decision weights based on cummulative outcomes
+
+# Arguments
 
 - `model`: a model object for prospect theory
 - `gamble`: a gamble object
-
-Function Signature
-````julia
-compute_weights(model::ProspectTheory, gamble::Gamble)
-````
 """
 function compute_weights(model::ProspectTheory, gamble::Gamble)
     pl,pg = split_probs(gamble)
@@ -74,17 +66,14 @@ function compute_weights(model::ProspectTheory, gamble::Gamble)
 end
 
 """
-*_compute_weights*
+    _compute_weights(p, γ)
 
-`_compute_weights` computes decision weights based on cummulative outcomes
+Computes decision weights based on cummulative outcomes
+
+# Arguments
 
 - `p`: a probability vector
 - `γ`: parameter that controls weighting of low and high probabilities
-
-Function Signature
-````julia
-_compute_weights(p, γ)
-````
 """
 function _compute_weights(p, γ)
     n = length(p)
