@@ -83,7 +83,10 @@ function _compute_weights(p, γ)
     return ω
 end
 
-weight(p, γ) = (p^γ)/(p^γ + (1-p)^γ)^(1/γ)
+function weight(p, γ) 
+    p = min(p, 1.0) # to deal with overflow
+    return (p^γ)/(p^γ + (1-p)^γ)^(1/γ)
+end
 
 function sort!(model::ProspectTheory, gamble)
     @unpack p,v = gamble
