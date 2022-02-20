@@ -1,7 +1,7 @@
 name = "UtilityModels"
 uuid = "bddc258c-9485-48da-848b-3e4c1ee8966c"
 authors = ["itsdfish"]
-version = "0.2.4"
+version = "0.2.5"
 
 [deps]
 ConcreteStructs = "2569d6c7-a4a2-43d3-a901-331e8e4be471"
