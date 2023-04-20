@@ -32,8 +32,8 @@ compute_utility(model::ExpectedUtility, gamble::Gamble)
 ````
 """
 function compute_utility(model::ExpectedUtility, gamble::Gamble)
-    @unpack α = model
-    @unpack v = gamble
-    utility = @. sign(v)*abs(v)^α 
+    (;α) = model
+    (;v) = gamble
+    utility = @. sign(v) * abs(v)^α 
     return utility
 end

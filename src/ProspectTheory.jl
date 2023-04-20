@@ -41,10 +41,10 @@ Computes utility of gamble outcomes according to prospect theory
 - `gamble`: a gamble object
 """
 function compute_utility(model::ProspectTheory, gamble)
-    @unpack α,β,λ = model
+    (;α,β,λ) = model
     vl,vg = split_values(gamble)
     utilg = vg.^α
-    utill = @. -λ*abs(vl)^β 
+    utill = @. -λ * abs(vl)^β 
     return [utill; utilg]
 end
 
@@ -60,7 +60,7 @@ Computes decision weights based on cummulative outcomes
 """
 function compute_weights(model::ProspectTheory, gamble::Gamble)
     pl,pg = split_probs(gamble)
-    @unpack γg,γl = model
+    (;γg,γl) = model
     ω = [_compute_weights(pl, γl); _compute_weights(pg, γg)]
     return ω
 end
@@ -85,11 +85,11 @@ end
 
 function weight(p, γ) 
     p = min(p, 1.0) # to deal with overflow
-    return (p^γ)/(p^γ + (1-p)^γ)^(1/γ)
+    return (p^γ) / (p^γ + (1-p)^γ)^(1/γ)
 end
 
 function sort!(model::ProspectTheory, gamble)
-    @unpack p,v = gamble
+    (;p,v) = gamble
     i = sortperm(v)
     p .= p[i]; v .= v[i]
     gains = v .>= 0
@@ -100,7 +100,7 @@ function sort!(model::ProspectTheory, gamble)
 end
 
 function split_values(gamble)
-    @unpack v = gamble
+    (;v) = gamble
     gains = v .>= 0
     vg = @view v[gains] 
     vl = @view v[.!gains]
@@ -108,7 +108,7 @@ function split_values(gamble)
 end
 
 function split_probs(gamble)
-    @unpack v,p = gamble
+    (;v,p) = gamble
     gains = v .>= 0
     pg = @view p[gains] 
     pl = @view p[.!gains]

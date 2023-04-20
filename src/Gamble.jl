@@ -16,3 +16,9 @@ end
 function Gamble(;p=[.5,.5], v=[10.0,0.0])
     return Gamble(p, v)
 end
+
+function sample(gamble::Gamble)
+    return sample(gamble.v, Weights(gamble.p))
+end
+
+mean(g::Gamble) = g.v' * g.p
