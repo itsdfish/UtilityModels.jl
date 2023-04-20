@@ -90,6 +90,18 @@ std(model, gamble)
 3.7516
 ````
 
+### Valence Expectancy
+
+```julia 
+using UtilityModels
+
+parms = (n_options=2, Δ=.3, α=.5, λ=1.5, c=.5)
+gambles = [Gamble(;p=[.5,.5],v=[4.0,-1.0]),Gamble(;p=[.3,.7],v=[2.0,0.0])]
+model = ValenceExpectancy(;parms...)
+choices,outcomes = rand(model, gambles, 100)
+logpdf(model, choices, outcomes)
+```
+
 *References*
 
 1. Fennema, H., & Wakker, P. (1997). Original and cumulative prospect theory: A discussion of empirical differences. Journal of Behavioral Decision Making, 10(1), 53-64.
