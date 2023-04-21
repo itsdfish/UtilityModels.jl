@@ -90,6 +90,12 @@ std(model, gamble)
 3.7516
 ````
 
+*References*
+
+1. Fennema, H., & Wakker, P. (1997). Original and cumulative prospect theory: A discussion of empirical differences. Journal of Behavioral Decision Making, 10(1), 53-64.
+
+2. Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and uncertainty, 5(4), 297-323.
+
 ### Valence Expectancy
 
 ```julia 
@@ -101,9 +107,3 @@ model = ValenceExpectancy(;parms...)
 choices,outcomes = rand(model, gambles, 100)
 logpdf(model, choices, outcomes)
 ```
-
-*References*
-
-1. Fennema, H., & Wakker, P. (1997). Original and cumulative prospect theory: A discussion of empirical differences. Journal of Behavioral Decision Making, 10(1), 53-64.
-
-2. Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and uncertainty, 5(4), 297-323.
