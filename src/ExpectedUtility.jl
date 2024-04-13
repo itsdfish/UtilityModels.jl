@@ -10,11 +10,11 @@ Constructor
 ExpectedUtility(;α=.80)
 ````
 """
-mutable struct ExpectedUtility{T} <:UtilityModel
+mutable struct ExpectedUtility{T} <: UtilityModel
     α::T
 end
 
-function ExpectedUtility(;α=.80)
+function ExpectedUtility(; α = 0.80)
     return ExpectedUtility(α)
 end
 
@@ -32,8 +32,8 @@ compute_utility(model::ExpectedUtility, gamble::Gamble)
 ````
 """
 function compute_utility(model::ExpectedUtility, gamble::Gamble)
-    (;α) = model
-    (;v) = gamble
-    utility = @. sign(v) * abs(v)^α 
+    (; α) = model
+    (; v) = gamble
+    utility = @. sign(v) * abs(v)^α
     return utility
 end

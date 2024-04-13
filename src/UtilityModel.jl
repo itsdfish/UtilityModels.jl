@@ -36,10 +36,10 @@ end
 
 """
 function var(model::UtilityModel, gamble::Gamble)
-    (;p) = gamble
+    (; p) = gamble
     utility = compute_utility(model, gamble)
     eu = mean(model, gamble)
-    return  sum(p .* (utility .- eu).^2)
+    return sum(p .* (utility .- eu) .^ 2)
 end
 
 """

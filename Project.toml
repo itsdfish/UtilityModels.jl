@@ -1,16 +1,14 @@
 name = "UtilityModels"
 uuid = "bddc258c-9485-48da-848b-3e4c1ee8966c"
 authors = ["itsdfish"]
-version = "0.3.2"
+version = "0.3.3"
 
 [deps]
-ConcreteStructs = "2569d6c7-a4a2-43d3-a901-331e8e4be471"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
-ConcreteStructs = "0.2.3"
 Distributions = "0.24.0, 0.25"
 SafeTestsets = "0.0.1, 0.1"
 StatsBase = "0.33, 0.34"

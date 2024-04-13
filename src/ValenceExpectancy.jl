@@ -10,16 +10,17 @@ abstract type AbstractValenceExpectancy <: UtilityModel end
 - `λ`: loss aversion where `λ > 0`
 - `c`: temperature
 """
-@concrete mutable struct ValenceExpectancy <: AbstractValenceExpectancy
-    υ
-    Δ
-    α
-    λ
-    c
+mutable struct ValenceExpectancy{T <: Real} <: AbstractValenceExpectancy
+    υ::Vector{T}
+    Δ::T
+    α::T
+    λ::T
+    c::T
 end
 
-function ValenceExpectancy(;n_options, Δ, α=.80, λ, c)
+function ValenceExpectancy(; n_options, Δ, α = 0.80, λ, c)
     υ = zeros(n_options)
+    Δ, α, λ, c = promote(Δ, α, λ, c)
     return ValenceExpectancy(υ, Δ, α, λ, c)
 end
 
@@ -37,9 +38,9 @@ compute_utility(model::ExpectedUtility, gamble::Gamble)
 ````
 """
 function compute_utility(model::ValenceExpectancy, outcomes)
-    (;λ,α) = model
+    (; λ, α) = model
     v = sum(outcomes)
-    utility = sign(v) * abs(v)^α 
+    utility = sign(v) * abs(v)^α
     utility *= v < 0 ? λ : 1
     return utility
 end
@@ -51,21 +52,21 @@ function update_utility!(model::AbstractValenceExpectancy, choice_idx, outcomes)
 end
 
 function compute_probs(model::AbstractValenceExpectancy, trial_idx)
-    (;υ,c) = model
+    (; υ, c) = model
     θ = min(300, (trial_idx / 10)^c)
     v = exp.(υ * θ)
     return v ./ sum(v)
 end
 
 function logpdf(model::AbstractValenceExpectancy, choices, outcomes)
-    LL = 0.0 
+    LL = 0.0
     for i ∈ 1:length(choices)
         probs = compute_probs(model, i)
         p = max(1e-10, probs[choices[i]])
         LL += log(p)
         update_utility!(model, choices[i], outcomes[i])
     end
-    return LL 
+    return LL
 end
 
 function rand(model::AbstractValenceExpectancy, gambles, n_trials::Int)
@@ -77,9 +78,8 @@ function rand(model::AbstractValenceExpectancy, gambles, n_trials::Int)
         choice = sample(1:n_options, Weights(probs))
         choices[i] = choice
         outcome = sample(gambles[choice])
-        outcomes[i] = outcome 
+        outcomes[i] = outcome
         update_utility!(model, choice, outcome)
     end
-    return choices,outcomes 
+    return choices, outcomes
 end
-

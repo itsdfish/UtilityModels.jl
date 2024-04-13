@@ -18,16 +18,20 @@ Fennema, H., & Wakker, P. (1997). Original and cumulative prospect theory: A dis
 
 Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and uncertainty, 5(4), 297-323.
 """
-@concrete mutable struct ProspectTheory <:UtilityModel
-    α
-    β
-    γg
-    γl
-    λ
+mutable struct ProspectTheory{T <: Real} <: UtilityModel
+    α::T
+    β::T
+    γg::T
+    γl::T
+    λ::T
 end
 
-function ProspectTheory(;α=.80, β=α, γg=.70, γl=γg, λ=2.25)
+function ProspectTheory(; α = 0.80, β = α, γg = 0.70, γl = γg, λ = 2.25)
     return ProspectTheory(α, β, γg, γl, λ)
+end
+
+function ProspectTheory(α, β, γg, γl, λ)
+    return ProspectTheory(promote(α, β, γg, γl, λ)...)
 end
 
 """
@@ -41,10 +45,10 @@ Computes utility of gamble outcomes according to prospect theory
 - `gamble`: a gamble object
 """
 function compute_utility(model::ProspectTheory, gamble)
-    (;α,β,λ) = model
-    vl,vg = split_values(gamble)
-    utilg = vg.^α
-    utill = @. -λ * abs(vl)^β 
+    (; α, β, λ) = model
+    vl, vg = split_values(gamble)
+    utilg = vg .^ α
+    utill = @. -λ * abs(vl)^β
     return [utill; utilg]
 end
 
@@ -59,8 +63,8 @@ Computes decision weights based on cummulative outcomes
 - `gamble`: a gamble object
 """
 function compute_weights(model::ProspectTheory, gamble::Gamble)
-    pl,pg = split_probs(gamble)
-    (;γg,γl) = model
+    pl, pg = split_probs(gamble)
+    (; γg, γl) = model
     ω = [_compute_weights(pl, γl); _compute_weights(pg, γg)]
     return ω
 end
@@ -77,40 +81,42 @@ Computes decision weights based on cummulative outcomes
 """
 function _compute_weights(p, γ)
     n = length(p)
-    f(i) = weight(sum(p[i:n]), γ) - weight(sum(p[(i+1):n]), γ)
-    ω = [f(i) for i in 1:n-1]
+    f(i) = weight(sum(p[i:n]), γ) - weight(sum(p[(i + 1):n]), γ)
+    ω = [f(i) for i = 1:(n - 1)]
     isempty(p) ? nothing : push!(ω, weight(p[n], γ))
     return ω
 end
 
-function weight(p, γ) 
+function weight(p, γ)
     p = min(p, 1.0) # to deal with overflow
-    return (p^γ) / (p^γ + (1-p)^γ)^(1/γ)
+    return (p^γ) / (p^γ + (1 - p)^γ)^(1 / γ)
 end
 
 function sort!(model::ProspectTheory, gamble)
-    (;p,v) = gamble
+    (; p, v) = gamble
     i = sortperm(v)
-    p .= p[i]; v .= v[i]
+    p .= p[i]
+    v .= v[i]
     gains = v .>= 0
     pl = @view p[.!gains]
     vl = @view v[.!gains]
-    reverse!(vl); reverse!(pl)
+    reverse!(vl)
+    reverse!(pl)
     return nothing
 end
 
 function split_values(gamble)
-    (;v) = gamble
+    (; v) = gamble
     gains = v .>= 0
-    vg = @view v[gains] 
+    vg = @view v[gains]
     vl = @view v[.!gains]
-    return vl,vg
+    return vl, vg
 end
 
 function split_probs(gamble)
-    (;v,p) = gamble
+    (; v, p) = gamble
     gains = v .>= 0
-    pg = @view p[gains] 
+    pg = @view p[gains]
     pl = @view p[.!gains]
-    return pl,pg
+    return pl, pg
 end
