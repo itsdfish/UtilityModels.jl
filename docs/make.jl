@@ -3,26 +3,26 @@ using UtilityModels
 
 makedocs(
     warnonly = true,
-    sitename="UtilityModels",
-    format=Documenter.HTML(
-        assets=[
+    sitename = "UtilityModels",
+    format = Documenter.HTML(
+        assets = [
             asset(
                 "https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap",
-                class=:css,
-            ),
+                class = :css
+            )
         ],
-        collapselevel=1,
+        collapselevel = 1
     ),
-    modules=[
-        UtilityModels, 
+    modules = [
+        UtilityModels
         # Base.get_extension(SequentialSamplingModels, :TuringExt),  
         # Base.get_extension(SequentialSamplingModels, :PlotsExt) 
     ],
-    pages=[
-        "Home" => "index.md",
+    pages = [
+        "Home" => "index.md"
     ]
 )
 
 deploydocs(
-    repo="github.com/itsdfish/UtilityModels.jl.git",
+    repo = "github.com/itsdfish/UtilityModels.jl.git",
 )
