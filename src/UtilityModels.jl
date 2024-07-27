@@ -1,6 +1,7 @@
 module UtilityModels
 
 using StatsBase
+using StatsFuns
 using Distributions
 
 import Distributions: ContinuousUnivariateDistribution
@@ -9,7 +10,10 @@ import Distributions: var
 import Distributions: std
 import Distributions: rand
 import Distributions: logpdf
+import Distributions: pdf
+import Distributions: rand
 import StatsBase: sample
+import Base: sort!
 
 export UtilityModel
 export TAX
@@ -23,7 +27,6 @@ export std
 export pdf
 export logpdf
 export sample
-#export rand
 
 include("Gamble.jl")
 include("UtilityModel.jl")

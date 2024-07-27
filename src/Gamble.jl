@@ -1,20 +1,31 @@
 """
-    Gamble(;p=[.5,.5], v=[10.0,0.0])
+    Gamble{T <: Real}
 
-Constructs a gamble object with probability vector `p` and outcome vector `v`. 
+A gamble object with probability vector `p` and outcome vector `v`. 
 
 # Fields 
 
 - `p`: probability vector
 - `v`: outcome vector
+
+# Constructors
+
+    Gamble(; p = [0.5, 0.5], v = [10.0, 0.0])
+
+    Gamble(p, v)
 """
-mutable struct Gamble{T1, T2}
-    p::T1
-    v::T2
+mutable struct Gamble{T <: Real}
+    p::Vector{T}
+    v::Vector{T}
 end
 
 function Gamble(; p = [0.5, 0.5], v = [10.0, 0.0])
     return Gamble(p, v)
+end
+
+function Gamble(p, v)
+    T = promote_type(typeof(p), typeof(v))
+    return Gamble(T(p), T(v))
 end
 
 function sample(gamble::Gamble)

@@ -1,35 +1,69 @@
 """
-*ExpectedUtility*
+    ExpectedUtility{T <: Real} <: UtilityModel
 
-`ExpectedUtility` constructs a model object for expected utility theory
+A model object for expected utility theory
 
-- `α`: utility curvature for gains
+# Fields 
 
-Constructor
+- `α`: utility curvature
+- `θ`: temperature or decisional consistency
+
+# Constructors
 ````julia
-ExpectedUtility(;α=.80)
+ExpectedUtility(; α = .80, θ = 1.0)
 ````
+````julia
+ExpectedUtility(α, θ)
+````
+# Example 
+
+```julia
+using UtilityModels
+
+gamble1 = Gamble(; 
+    p = [.25, .25, .50], 
+    v = [44, 40, 5]
+)
+
+gamble2 = Gamble(; 
+    p = [.25, .25, .50], 
+    v = [98, 10, 5]
+)
+
+gambles = [gamble1,gamble2]
+
+mean.(model, gambles)
+std.(model, gambles)
+
+model = ExpectedUtility(; α = .80, θ = 1.0)
+
+pdf(model, gambles, 1)
+
+logpdf(model, gambles, 1)
+```
 """
-mutable struct ExpectedUtility{T} <: UtilityModel
+mutable struct ExpectedUtility{T <: Real} <: UtilityModel
     α::T
+    θ::T
 end
 
-function ExpectedUtility(; α = 0.80)
-    return ExpectedUtility(α)
+function ExpectedUtility(; α = 0.80, θ = 1.0)
+    return ExpectedUtility(α, θ)
+end
+
+function ExpectedUtility(α, θ)
+    return ExpectedUtility(promote(α, θ))
 end
 
 """
-*compute_utility*
+    compute_utility(model::ExpectedUtility, gamble::Gamble)
 
-`compute_utility` computes utility of gamble outcomes according to expected utility theory
+Computes utility of gamble outcomes according to expected utility theory.
 
-- `model`: a model object for prospect theory
-- `gamble`: a gamble object
+# Arguments
 
-Function Signature
-````julia
-compute_utility(model::ExpectedUtility, gamble::Gamble)
-````
+- `model::ExpectedUtility`: a model object for prospect theory
+- `gamble::Gamble`: a gamble object
 """
 function compute_utility(model::ExpectedUtility, gamble::Gamble)
     (; α) = model

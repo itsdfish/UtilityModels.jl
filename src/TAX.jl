@@ -1,44 +1,84 @@
+abstract type AbstractTAX <: UtilityModel end
 """
-    TAX(;δ=.80, β=.3, γ=.70)
+    TAX{T <: Real} <: AbstractTAX
 
-Constructs a model object for transfer of attention exchange.
+A model object for transfer of attention exchange.
 
 # Fields
 
-- `δ=1.0`: transfer of attention parameter
-- `γ=1.0`: probability weighting parameter
-- `β=.70`: utility curvature
+- `δ = 1.0`: transfer of attention parameter
+- `γ = 1.0`: probability weighting parameter
+- `β = .70`: utility curvature
+- `θ`: temperature or decisional consistency
 
-*References*
+# Constructors
+
+```julia 
+TAX(; δ = -1.0, β = 1.0, γ = 0.70, θ = 1.0)
+
+TAX(δ, γ, β, θ)
+```
+# Example 
+
+```julia
+using UtilityModels
+
+gamble1 = Gamble(; 
+    p = [.25, .25, .50], 
+    v = [44, 40, 5]
+)
+
+gamble2 = Gamble(; 
+    p = [.25, .25, .50], 
+    v = [98, 10, 5]
+)
+
+gambles = [gamble1,gamble2]
+
+mean.(model, gambles)
+std.(model, gambles)
+
+model = TAX(; δ = -1.0, 
+    β = 1.0, 
+    γ = 0.70, 
+    θ = 1.0
+)
+
+pdf(model, gambles, 1)
+
+logpdf(model, gambles, 1)
+```
+# References
 
 Birnbaum, M. H., & Chavez, A. (1997). Tests of theories of decision making: Violations of branch independence and distribution independence. Organizational Behavior and Human Decision Processes, 71(2), 161-194.
 Birnbaum, M. H. (2008). New paradoxes of risky decision making. Psychological Review, 115(2), 463.
 """
-mutable struct TAX{T <: Real} <: UtilityModel
+mutable struct TAX{T <: Real} <: AbstractTAX
     δ::T
     γ::T
     β::T
+    θ::T
 end
 
-function TAX(; δ = -1.0, β = 1.0, γ = 0.70)
-    return TAX(δ, γ, β)
+function TAX(; δ = -1.0, β = 1.0, γ = 0.70, θ = 1.0)
+    return TAX(δ, γ, β, θ)
 end
 
-function TAX(δ, γ, β)
-    return TAX(promote(δ, γ, β)...)
+function TAX(δ, γ, β, θ)
+    return TAX(promote(δ, γ, β, θ)...)
 end
 
 """
-    compute_utility(model::TAX, gamble)
+    compute_utility(model::AbstractTAX, gamble)
 
 Computes utility of gamble outcomes according to TAX
 
 # Arguments
 
-- `model`: a model object for TAX
+- `model::AbstractTAX`: a model object for TAX
 - `gamble`: a gamble object
 """
-function compute_utility(model::TAX, gamble)
+function compute_utility(model::AbstractTAX, gamble)
     (; β) = model
     (; v) = gamble
     utility = @. sign(v) * abs(v)^β
@@ -54,7 +94,7 @@ function ω(p, pk, n, δ, γ)
     return δ * tax_weight(p, γ) / (n + 1)
 end
 
-function sort!(model::TAX, gamble)
+function sort!(model::AbstractTAX, gamble::Gamble)
     (; p, v) = gamble
     i = sortperm(v)
     p .= p[i]
@@ -63,16 +103,16 @@ function sort!(model::TAX, gamble)
 end
 
 """
-    mean(model::TAX, gamble::Gamble)
+    mean(model::AbstractTAX, gamble::Gamble)
 
 Computes mean utility for the TAX model
 
 # Arguments
 
-- `model`: a model M <: UtilityModel
-- `gamble`: a gamble object
+- `model::AbstractTAX`: a model M <: UtilityModel
+- `gamble::Gamble`: a gamble object
 """
-function mean(model::TAX, gamble::Gamble)
+function mean(model::AbstractTAX, gamble::Gamble)
     (; p, v) = gamble
     (; γ, δ) = model
     n = length(p)
@@ -90,7 +130,7 @@ function mean(model::TAX, gamble::Gamble)
     return eu / sum_weight
 end
 
-function var(model::TAX, gamble::Gamble)
+function var(model::AbstractTAX, gamble::Gamble)
     error("var not implimented for TAX")
     return -100.0
 end

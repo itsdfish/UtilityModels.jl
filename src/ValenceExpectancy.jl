@@ -1,14 +1,24 @@
 abstract type AbstractValenceExpectancy <: UtilityModel end
 """
-    ValenceExpectancy
+    ValenceExpectancy{T <: Real} <: AbstractValenceExpectancy
 
-`ValenceExpectancy` constructs a model object for expected utility theory
+A model object for expected utility theory
+
+# Fields
 
 - `υ`: a vector of expected utilities
 - `Δ`: learning rate where `Δ ∈ [0,1]`
 - `α`: utility shape parameter where `α > 0`
 - `λ`: loss aversion where `λ > 0`
 - `c`: temperature
+
+# Constructors
+
+```julia 
+ValenceExpectancy(; n_options, Δ, α = 0.80, λ, c)
+
+ValenceExpectancy(Δ, α, λ, c)
+```
 """
 mutable struct ValenceExpectancy{T <: Real} <: AbstractValenceExpectancy
     υ::Vector{T}
@@ -20,7 +30,12 @@ end
 
 function ValenceExpectancy(; n_options, Δ, α = 0.80, λ, c)
     υ = zeros(n_options)
+    return ValenceExpectancy(υ, Δ, α, λ, c)
+end
+
+function ValenceExpectancy(Δ, α, λ, c)
     Δ, α, λ, c = promote(Δ, α, λ, c)
+    υ = zeros(typeof(Δ), n_options)
     return ValenceExpectancy(υ, Δ, α, λ, c)
 end
 

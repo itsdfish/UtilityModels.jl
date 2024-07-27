@@ -2,7 +2,8 @@
     using Test
     using UtilityModels
     α = 1.0
-    model = ExpectedUtility(α)
+    θ = 1.0
+    model = ExpectedUtility(α, θ)
     p = [0.3, 0.2, 0.3, 0.2]
     v = [10.0, 3.0, -2.0, -1.0]
     gamble = Gamble(; p, v)
@@ -10,7 +11,8 @@
     @test eu ≈ p' * v atol = 1e-4
 
     α = 0.8
-    model = ExpectedUtility(α)
+    θ = 1.0
+    model = ExpectedUtility(α, θ)
     p = [0.3, 0.2, 0.3, 0.2]
     v = [10.0, 3.0, -2.0, -1.0]
     gamble = Gamble(; p, v)
