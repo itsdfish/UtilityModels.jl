@@ -125,6 +125,6 @@ Generates a simulated choice
 function rand(model::UtilityModel, gambles::Vector{<:Gamble})
     utility = mean.(model, gambles)
     util_exp = exp.(model.θ .* utility)
-    probs =  util_exp ./ sum(util_exp)
+    probs = util_exp ./ sum(util_exp)
     return sample(1:length(gambles), Weights(probs))
 end
