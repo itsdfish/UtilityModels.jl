@@ -4,29 +4,33 @@ using StatsBase
 using StatsFuns
 using Distributions
 
-import Distributions: ContinuousUnivariateDistribution
+import Distributions: length
+import Distributions: loglikelihood
+import Distributions: logpdf
 import Distributions: mean
-import Distributions: var
+import Distributions: pdf
 import Distributions: std
 import Distributions: rand
-import Distributions: logpdf
-import Distributions: pdf
-import Distributions: rand
+import Distributions: var
+
 import StatsBase: sample
 import Base: sort!
 
-export UtilityModel
-export TAX
-export ProspectTheory
 export ExpectedUtility
-export ValenceExpectancy
 export Gamble
+export ProspectTheory
+export TAX
+export UtilityModel
+export ValenceExpectancy
+
+export compute_utility
 export mean
-export var
-export std
-export pdf
+export loglikelihood
 export logpdf
+export pdf
+export var
 export sample
+export std
 
 include("Gamble.jl")
 include("UtilityModel.jl")

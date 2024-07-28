@@ -52,7 +52,7 @@ function ExpectedUtility(; α = 0.80, θ = 1.0)
 end
 
 function ExpectedUtility(α, θ)
-    return ExpectedUtility(promote(α, θ))
+    return ExpectedUtility(promote(α, θ)...)
 end
 
 """
@@ -68,6 +68,5 @@ Computes utility of gamble outcomes according to expected utility theory.
 function compute_utility(model::ExpectedUtility, gamble::Gamble)
     (; α) = model
     (; v) = gamble
-    utility = @. sign(v) * abs(v)^α
-    return utility
+    return @. sign(v) * abs(v)^α
 end

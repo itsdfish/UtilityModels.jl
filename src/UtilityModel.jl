@@ -1,10 +1,10 @@
 """
-    UtilityModel <: ContinuousUnivariateDistribution
+    UtilityModel <: DiscreteMultivariateDistribution
 
-`UtilityModel` is an abstract utility-based model object
+`UtilityModel` is an abstract type for  utility-based models
 ````
 """
-abstract type UtilityModel <: ContinuousUnivariateDistribution end
+abstract type UtilityModel <: DiscreteMultivariateDistribution end
 
 """
     mean(model::UtilityModel, gamble::Gamble)
@@ -23,6 +23,9 @@ function mean(model::UtilityModel, gamble::Gamble)
     utility = compute_utility(model, gamble)
     return weights' * utility
 end
+
+Base.broadcastable(model::UtilityModel) = Ref(model)
+length(model::UtilityModel) = 1
 
 """
     var(model::UtilityModel, gamble::Gamble)
@@ -87,12 +90,14 @@ Computes the choice probability for a vector of gambles.
 
 - `model::UtilityModel`: a utility model 
 - `gambles::Vector{<:Gamble}`: a vector of gambles representing a choice set
-- `choice_idx::Int`: the index for the chosen gamble
+- `choice_idxs::Vector{<:Int}`: indices for the chosen gambles
 """
-function pdf(model::UtilityModel, gambles::Vector{<:Gamble}, choice_idx::Int)
+function pdf(model::UtilityModel, gambles::Vector{<:Gamble}, choice_idxs::Vector{<:Int})
     utility = mean.(model, gambles)
     util_exp = exp.(model.θ .* utility)
-    return util_exp[choice_idx] ./ sum(util_exp)
+    n = sum(choice_idxs)
+    p = util_exp ./ sum(util_exp)
+    return pdf(Multinomial(n, p), choice_idxs)
 end
 
 """
@@ -104,13 +109,46 @@ Computes the choice log probability for a vector of gambles.
 
 - `model::UtilityModel`: a utility model 
 - `gambles::Vector{<:Gamble}`: a vector of gambles representing a choice set
-- `choice_idx::Int`: the index for the chosen gamble
+- `choice_idxs::Vector{<:Int}`: indices for the chosen gambles
 """
-function logpdf(model::UtilityModel, gambles::Vector{<:Gamble}, choice_idx::Int)
+function logpdf(model::UtilityModel, gambles::Vector{<:Gamble}, choice_idxs::Vector{<:Int})
     utility = mean.(model, gambles)
-    util_scaled = model.θ .* utility
-    return util_scaled[choice_idx] - logsumexp(util_scaled)
+    util_exp = exp.(model.θ .* utility)
+    T = typeof(model.θ)
+    n = sum(choice_idxs)
+    p = util_exp ./ sum(util_exp)
+    !isprobvec(p) ? (return T(-Inf)) : nothing
+    return logpdf(Multinomial(n, p), choice_idxs)
 end
+
+isprobvec(p::AbstractVector{<:Real}) =
+    all(x -> x ≥ zero(x), p) && isapprox(sum(p), one(eltype(p)))
+
+function logpdf(model::UtilityModel, data::Tuple)
+    return logpdf(model, data[1], data[2])
+end
+
+loglikelihood(
+    model::UtilityModel,
+    data::Tuple{Vector{<:Vector{<:Gamble}}, Vector{<:Vector{<:Integer}}}
+) = loglikelihood(model, data[1], data[2])
+
+loglikelihood(
+    model::UtilityModel,
+    gambles::Vector{<:Vector{<:Gamble}},
+    choices::Vector{<:Vector{<:Integer}}
+) = sum(logpdf.(model, gambles, choices))
+
+loglikelihood(
+    model::UtilityModel,
+    gambles::Vector{<:Gamble},
+    choices::Vector{<:Integer}
+) = sum(logpdf(model, gambles, choices))
+
+loglikelihood(
+    model::UtilityModel,
+    data::Tuple{Vector{<:Gamble}, Vector{<:Integer}}
+) = sum(logpdf(model, data[1], data[2]))
 
 """
     rand(model::UtilityModel, gambles::Vector{<:Gamble})
@@ -122,9 +160,9 @@ Generates a simulated choice
 - `model::UtilityModel`: a utility model 
 - `gambles::Vector{<:Gamble}`: a vector of gambles representing a choice set
 """
-function rand(model::UtilityModel, gambles::Vector{<:Gamble})
+function rand(model::UtilityModel, gambles::Vector{<:Gamble}, n_sim::Int = 1)
     utility = mean.(model, gambles)
     util_exp = exp.(model.θ .* utility)
     probs = util_exp ./ sum(util_exp)
-    return sample(1:length(gambles), Weights(probs))
+    return rand(Multinomial(n_sim, probs))
 end

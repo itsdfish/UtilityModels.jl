@@ -19,7 +19,11 @@ makedocs(
     # Base.get_extension(SequentialSamplingModels, :PlotsExt) 
     ],
     pages = [
-        "Home" => "index.md"
+        "Home" => "index.md",
+        "Models" => [
+            "Expected Utility Theory" => "expected_utility.md"
+        ],
+        "Parameter Estimation" => "parameter_estimation.md"
     ]
 )
 

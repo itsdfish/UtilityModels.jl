@@ -1,7 +1,7 @@
 name = "UtilityModels"
 uuid = "bddc258c-9485-48da-848b-3e4c1ee8966c"
 authors = ["itsdfish"]
-version = "0.3.4"
+version = "0.4.0"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"

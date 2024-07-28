@@ -120,10 +120,10 @@ function mean(model::AbstractTAX, gamble::Gamble)
     utility = compute_utility(model, gamble)
     eu = 0.0
     sum_weight = 0.0
-    for i = 1:n
+    for i ∈ 1:n
         eu += tax_weight(p[i], γ) * utility[i]
         sum_weight += tax_weight(p[i], γ)
-        for k = 1:(i - 1)
+        for k ∈ 1:(i - 1)
             eu += (utility[i] - utility[k]) * ω(p[i], p[k], n, δ, γ)
         end
     end
