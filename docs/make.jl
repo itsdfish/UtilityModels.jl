@@ -20,10 +20,13 @@ makedocs(
     ],
     pages = [
         "Home" => "index.md",
+        "Gambles" => "gambles.md",
         "Models" => [
-            "Expected Utility Theory" => "expected_utility.md"
+            "Expected Utility Theory" => "expected_utility.md",
+            "Prospect Theory" => "prospect_theory.md"
         ],
-        "Parameter Estimation" => "parameter_estimation.md"
+        "Parameter Estimation" => "parameter_estimation.md",
+        "API" => "api.md"
     ]
 )
 

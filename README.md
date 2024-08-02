@@ -8,12 +8,15 @@ UtilityModels.jl is a collection of utility based decision models. Currently, ex
 using UtilityModels
 # TAX with default values
 model = TAX()
-p = [.25,.25,.50]
-v = [100.0,0.0,-50.0]
-gamble = Gamble(; p, v)
+# trinary gamble
+gamble = Gamble(;
+    p = [.25,.25,.50],
+    v = [100.0,0.0,-50.0]
+)
 # expected utility
 mean(model, gamble)
 ````
 ````julia
+# output
 -15.51253
 ````

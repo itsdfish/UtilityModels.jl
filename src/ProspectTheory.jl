@@ -107,12 +107,12 @@ Computes decision weights based on cummulative outcomes
 function compute_weights(model::AbstractProspectTheory, gamble::Gamble)
     pl, pg = split_probs(gamble)
     (; γg, γl) = model
-    ω = [_compute_weights(pl, γl); _compute_weights(pg, γg)]
+    ω = [compute_weights(model, pl, γl); compute_weights(model, pg, γg)]
     return ω
 end
 
 """
-    _compute_weights(p, γ)
+    compute_weights(model::AbstractProspectTheory, p::Vector{<:Real}, γ::Real)
 
 Computes decision weights based on cummulative outcomes
 
@@ -121,15 +121,17 @@ Computes decision weights based on cummulative outcomes
 - `p`: a probability vector
 - `γ`: parameter that controls weighting of low and high probabilities
 """
-function _compute_weights(p, γ)
+function compute_weights(model::AbstractProspectTheory, p::AbstractVector{<:Real}, γ::Real)
     n = length(p)
-    f(i) = weight(sum(p[i:n]), γ) - weight(sum(p[(i + 1):n]), γ)
-    ω = [f(i) for i = 1:(n - 1)]
-    isempty(p) ? nothing : push!(ω, weight(p[n], γ))
+    f(i) =
+        compute_weights(model, sum(p[i:n]), γ) -
+        compute_weights(model, sum(p[(i + 1):n]), γ)
+    ω = [f(i) for i ∈ 1:(n - 1)]
+    isempty(p) ? nothing : push!(ω, compute_weights(model, p[n], γ))
     return ω
 end
 
-function weight(p, γ)
+function compute_weights(model::AbstractProspectTheory, p::Real, γ::Real)
     p = min(p, 1.0) # to deal with overflow
     return (p^γ) / (p^γ + (1 - p)^γ)^(1 / γ)
 end

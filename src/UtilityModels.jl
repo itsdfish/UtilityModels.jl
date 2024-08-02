@@ -1,8 +1,9 @@
 module UtilityModels
 
+using Distributions
+using PrettyTables
 using StatsBase
 using StatsFuns
-using Distributions
 
 import Distributions: length
 import Distributions: loglikelihood
@@ -38,4 +39,6 @@ include("ProspectTheory.jl")
 include("ExpectedUtility.jl")
 include("ValenceExpectancy.jl")
 include("TAX.jl")
+include("utilities.jl")
+
 end

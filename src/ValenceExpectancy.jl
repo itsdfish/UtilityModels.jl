@@ -45,12 +45,8 @@ end
 `compute_utility` computes utility of gamble outcomes according to expected utility theory
 
 - `model`: a model object for prospect theory
-- `gamble`: a gamble object
+- `outcomes`: observed outcomes of decisions
 
-Function Signature
-````julia
-compute_utility(model::ExpectedUtility, gamble::Gamble)
-````
 """
 function compute_utility(model::ValenceExpectancy, outcomes)
     (; λ, α) = model

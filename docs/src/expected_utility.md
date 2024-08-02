@@ -1,9 +1,10 @@
 # Expected Utility Theory
 
-The Leaky Competing Accumulator (LCA; Usher & McClelland, 2001) is a sequential sampling model in which evidence for options races independently. The LCA is similar to the Linear Ballistic Accumulator (LBA), but additionally assumes an intra-trial noise and leakage (in contrast, the LBA assumes that evidence accumulates in a ballistic fashion, i.e., linearly and deterministically until it hits the threshold).
+Expected utility theory is a theory of rational decision making with roots in economics. According to expected utility theory, gambles are evaluated by computing an expected utility, and selecting the gamble with the highest expected utility. The expected utility is computed as a probability weighted sum across all possible outcomes, where the outcomes can undergo a transformation from objective to subjective units called utility. Note that many utility-based models can be conceptualized as a generalization of expected utility theory. 
 
 # Example
-In this example, we will demonstrate how to use the LCA in a generic two alternative forced choice task. 
+In this example, we will demonstrate how to use expected utility theory with a choice between two gambles. 
+
 ```@setup expected_utility
 using Plots
 using Random
@@ -21,7 +22,7 @@ Random.seed!(8741)
 ```
 ## Create Choice Set
 
-We will consider the following two options in this example. Note that the package can handle choices between an arbitrary number of options.
+We will consider the following two options in this example: $\mathbf{G}_1 = (58, .20; 56, .20; 2, .60)$ and $\mathbf{G}_2 = (96, .20; 4, .20; 2, .60)$. Note that the package can handle choices between an arbitrary number of options, each with an arbitrary number of outcomes.
 
 ```@example expected_utility
 gamble1 = Gamble(; 

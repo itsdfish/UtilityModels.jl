@@ -28,8 +28,16 @@ function Gamble(p, v)
     return Gamble(T(p), T(v))
 end
 
-function sample(gamble::Gamble)
+function rand(gamble::Gamble)
     return sample(gamble.v, Weights(gamble.p))
 end
 
 mean(g::Gamble) = g.v' * g.p
+
+std(g::Gamble) = √(var(g))
+
+function var(gamble::Gamble)
+    (; p, v) = gamble
+    ev = mean(gamble)
+    return sum(p .* (v .- ev) .^ 2)
+end
