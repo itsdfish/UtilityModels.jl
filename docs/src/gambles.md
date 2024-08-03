@@ -2,8 +2,8 @@
 
 Gamble objects are a special type of categorical distribution which contain a $n \times 1$ vector of possible outcomes and a corresponding $n \times 1$ vector of outcome probabilities. The fields are
 
-- `v`: the vector of outcome values 
-- `p`: the vector of outcome probabilities
+- `v`: a vector of outcome values 
+- `p`: a vector of outcome probabilities
 
 # Example
 
@@ -25,6 +25,7 @@ Random.seed!(9854)
 ## Create a Gamble Object
 
 The code block below illustrates how to construct a gamble object for the gamble $\mathbf{G} = (58, .20; 56, .20; 2, .60)$.
+
 ```@example gamble
 gamble = Gamble(; 
     p = [.20, .20, .60], 

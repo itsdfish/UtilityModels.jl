@@ -164,5 +164,8 @@ function rand(model::UtilityModel, gambles::Vector{<:Gamble}, n_sim::Int = 1)
     utility = mean.(model, gambles)
     util_exp = exp.(model.θ .* utility)
     probs = util_exp ./ sum(util_exp)
+    if any(isnan, probs)
+        probs = utility[1] > utility[2] ? [1 - eps(), eps()] : [eps(), 1 - eps()]
+    end
     return rand(Multinomial(n_sim, probs))
 end

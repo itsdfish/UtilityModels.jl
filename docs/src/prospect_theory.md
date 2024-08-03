@@ -46,7 +46,7 @@ In the code below, we will define parameters for the LBA and create a model obje
 The utility function for prospect theory is given by:
 
 ```math
-\lambda = \begin{cases} 
+U(x) = \begin{cases} 
       x^\alpha  & \geq 0 \\
       -\lambda |x|^\beta & \mathrm{ otherwise}\\
 \end{cases}.
@@ -163,7 +163,7 @@ The parameter $\theta$—sometimes known as decisional consistency or sensitivit
 ```math
 \Pr(\mathbf{G}_i \mid \{\mathbf{G}_1, \dots, \mathbf{G}_n\}) = \frac{e^{\theta \cdot \mathrm{EU}(\mathbf{G}_i)}}{\sum_{j=1}^n e^{\theta \cdot \mathrm{EU}(\mathbf{G}_j)}}
 ```
-As shown in the plot below,  parameter $\theta$ modulates the choice probability.
+As shown in the plot below, parameter $\theta$ modulates the choice probability.
 
 ```@raw html
 <details><summary>Show Plotting Code</summary>
@@ -251,3 +251,9 @@ Finally, we compute the joint choice probabilities for each choice set:
  ```@example prospect_theory
 choices = pdf.(dist, choice_sets, choices)
 ```
+
+# References
+
+Fennema, H., & Wakker, P. (1997). Original and cumulative prospect theory: A discussion of empirical differences. Journal of Behavioral Decision Making, 10(1), 53-64.
+
+Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and uncertainty, 5(4), 297-323.

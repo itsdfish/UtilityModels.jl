@@ -5,10 +5,13 @@ using PrettyTables
 using StatsBase
 using StatsFuns
 
+import Distributions: insupport
 import Distributions: length
 import Distributions: loglikelihood
 import Distributions: logpdf
+import Distributions: maximum
 import Distributions: mean
+import Distributions: params
 import Distributions: pdf
 import Distributions: std
 import Distributions: rand

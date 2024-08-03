@@ -38,7 +38,8 @@ gambles = [gamble1,gamble2]
 mean.(model, gambles)
 std.(model, gambles)
 
-model = TAX(; δ = -1.0, 
+model = TAX(; 
+    δ = -1.0, 
     β = 1.0, 
     γ = 0.70, 
     θ = 1.0
@@ -67,6 +68,8 @@ end
 function TAX(δ, γ, β, θ)
     return TAX(promote(δ, γ, β, θ)...)
 end
+
+params(dist::AbstractTAX) = (dist.δ, dist.γ, dist.β, dist.θ)
 
 """
     compute_utility(model::AbstractTAX, gamble)
