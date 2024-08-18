@@ -94,6 +94,7 @@ Computes the choice probability for a vector of gambles.
 """
 function pdf(model::UtilityModel, gambles::Vector{<:Gamble}, choice_idxs::Vector{<:Int})
     utility = mean.(model, gambles)
+    utility .-= maximum(utility)
     util_exp = exp.(model.θ .* utility)
     n = sum(choice_idxs)
     p = util_exp ./ sum(util_exp)
@@ -113,11 +114,10 @@ Computes the choice log probability for a vector of gambles.
 """
 function logpdf(model::UtilityModel, gambles::Vector{<:Gamble}, choice_idxs::Vector{<:Int})
     utility = mean.(model, gambles)
-    util_exp = exp.(model.θ .* utility)
-    T = typeof(model.θ)
     n = sum(choice_idxs)
-    p = util_exp ./ sum(util_exp)
-    !isprobvec(p) ? (return T(-Inf)) : nothing
+    p = softmax(model.θ .* utility)
+    map!(x -> x == 1 ? 1 - eps() : x == 0 ? eps() : x, p, p)
+    #println("p $p parms $(params(model)) logpdf $(logpdf(Multinomial(n, p), choice_idxs))")
     return logpdf(Multinomial(n, p), choice_idxs)
 end
 
