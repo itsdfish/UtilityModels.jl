@@ -126,7 +126,7 @@ function compute_weights(model::AbstractProspectTheory, p::AbstractVector{<:Real
     f(i) =
         compute_weights(model, sum(p[i:n]), γ) -
         compute_weights(model, sum(p[(i + 1):n]), γ)
-    ω = [f(i) for i ∈ 1:(n - 1)]
+    ω = [f(i) for i ∈ 1:(n-1)]
     isempty(p) ? nothing : push!(ω, compute_weights(model, p[n], γ))
     return ω
 end
@@ -142,8 +142,8 @@ function sort!(model::AbstractProspectTheory, gamble::Gamble)
     p .= p[i]
     v .= v[i]
     gains = v .>= 0
-    pl = @view p[.!gains]
-    vl = @view v[.!gains]
+    pl = @view p[.! gains]
+    vl = @view v[.! gains]
     reverse!(vl)
     reverse!(pl)
     return nothing
@@ -153,7 +153,7 @@ function split_values(gamble)
     (; v) = gamble
     gains = v .>= 0
     vg = @view v[gains]
-    vl = @view v[.!gains]
+    vl = @view v[.! gains]
     return vl, vg
 end
 
@@ -161,6 +161,6 @@ function split_probs(gamble)
     (; v, p) = gamble
     gains = v .>= 0
     pg = @view p[gains]
-    pl = @view p[.!gains]
+    pl = @view p[.! gains]
     return pl, pg
 end
