@@ -49,7 +49,7 @@ U(x) = \mathrm{sign}(x)|x|^\alpha.
 ```
 The parameter $\alpha$ can be intrepreted in terms of risk profile as follows: 
 
-- risk averse: ``0 \geq \alpha < 1``
+- risk averse: ``0 \leq \alpha < 1``
 - risk neutral: ``\alpha = 1``
 - risk seeking: ``\alpha > 1``
 
@@ -80,7 +80,7 @@ Below, we set the $\alpha$ parameter to a value associated with moderate risk av
 
 ### Decisional Consistency 
 
-The parameter $\theta$—sometimes known as decisional consistency or sensitivity—controls how deterministically a model selects the option with the higher expected utility. In the equation below, the probability of selecting $\x_i$ from choice set $\{x_1,\dots, x_n\}$ is computed with the soft max function.
+The parameter $\theta$—sometimes known as decisional consistency or sensitivity—controls how deterministically a model selects the option with the higher expected utility. In the equation below, the probability of selecting $x_i$ from choice set $\{x_1,\dots, x_n\}$ is computed with the soft max function.
 
 ```math
 \Pr(X = x_i \mid \{x_1, \dots, x_n\}) = \frac{e^{\theta \cdot \mathrm{EU}(x_i)}}{\sum_{j=1}^n e^{\theta \cdot \mathrm{EU}(x_j)}}
