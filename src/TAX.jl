@@ -33,11 +33,6 @@ gamble2 = Gamble(;
     v = [98, 10, 5]
 )
 
-gambles = [gamble1,gamble2]
-
-mean.(model, gambles)
-std.(model, gambles)
-
 model = TAX(; 
     δ = -1.0, 
     β = 1.0, 
@@ -45,8 +40,10 @@ model = TAX(;
     θ = 1.0
 )
 
-pdf(model, gambles, 1)
+gambles = [gamble1,gamble2]
 
+mean.(model, gambles)
+pdf(model, gambles, 1)
 logpdf(model, gambles, 1)
 ```
 # References

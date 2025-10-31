@@ -1,7 +1,7 @@
 name = "UtilityModels"
 uuid = "bddc258c-9485-48da-848b-3e4c1ee8966c"
 authors = ["itsdfish"]
-version = "0.4.1"
+version = "0.4.2"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -11,7 +11,7 @@ StatsFuns = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
 
 [compat]
 Distributions = "0.24.0, 0.25"
-PrettyTables = "2"
+PrettyTables = "3"
 SafeTestsets = "0.0.1, 0.1"
 StatsBase = "0.33, 0.34"
 StatsFuns = "1"
